@@ -1,0 +1,30 @@
+{
+  "name": "webscrap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc-watch --onSuccess \"node dist \""
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/luxon": "^3.3.2",
+    "@types/puppeteer": "^5.4.4",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "nodemon": "^2.0.15",
+    "tsc-watch": "^4.5.0",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^21.3.2",
+    "luxon": "^3.4.3",
+    "puppeteer": "^13.0.0"
+  }
+}
