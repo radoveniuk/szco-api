@@ -28,7 +28,8 @@ const list = async (search: string) => {
     const result = await page.evaluate(scrapCardsFromPage);
     const endDate = new Date();
     console.log((endDate.getTime() - startDate.getTime()) * 0.001, 'seconds');
-    return result;
+    await browser.close();
+return result;
   } catch (error) {
     console.log(error);
     return [];
