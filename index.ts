@@ -15,19 +15,15 @@ const init = async () => {
     tls
   });
 
-  server.ext('onRequest', function (request, reply) {
-    if (request.query.private_access_token !== '755e6dd8af690571fc0ed957dde2adc56ce823e6549c2286914295ffad427bd387b651eb3dc593e1') {
-      return Error('You are not authorizated');
-    }
-    return reply.continue;
-  });
-
   server.route({
     method: 'GET',
     path: '/',
-    handler: (request) => {
+    handler: (request, h) => {
+      if (request.query.private_access_token !== '755e6dd8af690571fc0ed957dde2adc56ce823e6549c2286914295ffad427bd387b651eb3dc593e1') {
+        return h.response('Access denied').code(401);
+      }
       if (!request.query.search) {
-        return 'Type your request with search param.';
+        return h.response('Type your request with search param.').code(400);
       }
       return list(request.query.search).then((res) => res);
     }
@@ -36,7 +32,13 @@ const init = async () => {
   server.route({
     method: 'GET',
     path: '/extended',
-    handler: (request) => {
+    handler: (request, h) => {
+      if (request.query.private_access_token !== '755e6dd8af690571fc0ed957dde2adc56ce823e6549c2286914295ffad427bd387b651eb3dc593e1') {
+        return h.response('Access denied').code(401);
+      }
+      if (!request.query.search) {
+        return h.response('Type your request with search param.').code(400);
+      }
       return extended(request.query.id).then((res) => res);
     }
   });
