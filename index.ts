@@ -36,8 +36,8 @@ const init = async () => {
       if (request.query.private_access_token !== '755e6dd8af690571fc0ed957dde2adc56ce823e6549c2286914295ffad427bd387b651eb3dc593e1') {
         return h.response('Access denied').code(401);
       }
-      if (!request.query.search) {
-        return h.response('Type your request with search param.').code(400);
+      if (!request.query.id) {
+        return h.response('Type your request with id param.').code(400);
       }
       return extended(request.query.id).then((res) => res);
     }
