@@ -24,7 +24,7 @@ const init = async () => {
       }
       if (!request.query.search) {
         return h.response('Type your request with search param.').code(400);
-      }
+      }      
       return list(request.query.search).then((res) => res);
     }
   });
