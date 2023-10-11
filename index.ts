@@ -11,7 +11,7 @@ const init = async () => {
   //   cert: fs.readFileSync(path.join(__dirname, '/../certs/certificate.crt'))
   // };
   const server = Hapi.server({
-    port: 5000,
+    port: 3001,
     host: 'localhost'
     // tls
   });
