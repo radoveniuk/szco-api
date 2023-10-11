@@ -4,13 +4,13 @@ import { scrapInfo } from './scrapInfo';
 const extended = async (id: string) => {
   const startDate = new Date();
 
-  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
-  const page = await browser.newPage();
-  const url = `https://www.zrsr.sk/Detail/${id}`;
-
-  await page.goto(url, { waitUntil: 'networkidle2' });
-  // page.click('#vypis_uplny');
   try {
+    const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
+    const page = await browser.newPage();
+    const url = `https://www.zrsr.sk/Detail/${id}`;
+
+    await page.goto(url, { waitUntil: 'networkidle2' });
+    await page.click('#vypis_uplny');
     const result = await page.evaluate(scrapInfo);
     await browser.close();
     const endDate = new Date();
