@@ -4,7 +4,7 @@ import { scrapInfo } from './scrapInfo';
 const extended = async (id: string) => {
   const startDate = new Date();
 
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   const url = `https://www.zrsr.sk/Detail/${id}`;
 

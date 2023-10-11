@@ -2,7 +2,7 @@ export const scrapInfo = () => {
   const RowTitles = {
     companyName: 'Obchodné meno',
     cin: 'IČO',
-    businessAddress: 'Adresa miesta činnosti podniku zahraničnej osoby',
+    businessAddressForeign: 'Adresa miesta činnosti podniku zahraničnej osoby',
     businessAddressSk: 'Miesto podnikania',
     address: 'Vedúci podniku zahraničnej osoby'
   };
@@ -75,17 +75,18 @@ export const scrapInfo = () => {
         // @ts-ignore
         description: el.children[0]?.innerText.trim(),
         effective_from: convertToISODate(dateFrom as string),
-        effective_to: dateTo ? convertToISODate(dateTo as string) : null
+        effective_to: dateTo ? convertToISODate(dateTo as string) : null,
+        status: dateTo ? 'closed' : 'open'
       };
     });
     return result;
   };
   const activities = getActivities();
   const getStatus = () => {
-    let result = 'open';
+    let result = 'active';
     const maybeTerminationMessage = Array.from(document.querySelectorAll('p.vypis'));
     const isClosed = maybeTerminationMessage.some((el) => el.textContent?.includes('ukončil podnikateľskú činnosť'));
-    if (activities.every((el) => el.effective_to === null) && !isClosed) {
+    if (activities.every((el) => el.effective_to) && !isClosed) {
       result = 'stopped';
     }
     if (isClosed) {
@@ -96,10 +97,12 @@ export const scrapInfo = () => {
   return {
     companyName: findInfo('companyName'),
     cin: findInfo('cin'),
-    name: findInfo('address')?.split('\n')?.[0],
+    name: findInfo('address')?.split('\n')?.[0] || findInfo('companyName'),
     address: findInfo('address')?.split('\n')?.[1],
-    businessAddress: findInfo('businessAddress') || findInfo('businessAddressSk'),
+    businessAddress: findInfo('businessAddressForeign') || findInfo('businessAddressSk'),
     status: getStatus(),
-    activities
+    activities,
+    isSlovak: !findInfo('businessAddressForeign'),
+    type: 'individual'
   };
 };
