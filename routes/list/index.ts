@@ -11,8 +11,16 @@ const list = async (search: string) => {
 
   const startDate = new Date();
 
+  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
   try {
-    const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
+    let timing = 0;
+    const intervalID = setInterval(async () => {
+      timing++;
+      if (timing === 10) {
+        await browser.close();
+        clearInterval(intervalID);
+      }
+    }, 1000);
     const page = await browser.newPage();
 
     await page.goto(url, { waitUntil: 'networkidle2' });
@@ -29,9 +37,11 @@ const list = async (search: string) => {
     const endDate = new Date();
     console.log((endDate.getTime() - startDate.getTime()) * 0.001, 'seconds');
     await browser.close();
-return result;
+    clearInterval(intervalID);
+    return result;
   } catch (error) {
     console.log(error);
+    await browser.close();
     return [];
   }
 };

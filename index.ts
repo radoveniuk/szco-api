@@ -24,7 +24,7 @@ const init = async () => {
       }
       if (!request.query.search) {
         return h.response('Type your request with search param.').code(400);
-      }      
+      }
       return list(request.query.search).then((res) => res);
     }
   });
@@ -39,7 +39,12 @@ const init = async () => {
       if (!request.query.id) {
         return h.response('Type your request with id param.').code(400);
       }
-      return extended(request.query.id).then((res) => res);
+      return extended(request.query.id).then((res) => {
+        if (res) {
+          return h.response(res).code(200);
+        }
+        return h.response('Not found').code(404);
+      });
     }
   });
   await server.start();
