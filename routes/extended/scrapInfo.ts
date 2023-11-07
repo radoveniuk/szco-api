@@ -19,6 +19,18 @@ export const scrapInfo = () => {
       const dateFrom = el.children[1]?.children[1]?.textContent;
       const dateTo = el.children[2]?.children[1]?.textContent;
 
+      if (el.children[2]?.children[0]?.textContent?.includes('Doba pozastavenia')) {
+        return {
+          // @ts-ignore
+          description: el.children[0]?.innerText.trim(),
+          effective_from: convertToISODate(dateFrom as string),
+          effective_to: null,
+          suspended_from: convertToISODate(el.children[2]?.children[0]?.textContent?.trim()?.replace('Doba pozastavenia od ', '')?.trim() as string),
+          suspended_to: convertToISODate(dateTo?.trim()?.replace('do ', '')?.trim() as string),
+          status: 'stopped'
+        };
+      }
+
       function convertToISODate (dateString: string) {
         const parts = dateString.split('.');
         if (parts.length !== 3) {
@@ -30,7 +42,7 @@ export const scrapInfo = () => {
         const year = parts[2];
 
         if (!isValidDate(day, month, year)) {
-          throw new Error('Некорректная дата.');
+          throw new Error(`Некорректная дата. ${dateString}`);
         }
 
         return `${year}-${month}-${day}`;
@@ -86,7 +98,8 @@ export const scrapInfo = () => {
     let result = 'active';
     const maybeTerminationMessage = Array.from(document.querySelectorAll('p.vypis'));
     const isClosed = maybeTerminationMessage.some((el) => el.textContent?.includes('ukončil podnikateľskú činnosť'));
-    if (activities.every((el) => el.effective_to) && !isClosed) {
+    const isStopped = maybeTerminationMessage.some((el) => el.textContent?.includes('Podnikateľský subjekt má pozastavenú činnosť'));
+    if (isStopped) {
       result = 'stopped';
     }
     if (isClosed) {
