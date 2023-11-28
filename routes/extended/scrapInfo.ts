@@ -107,6 +107,11 @@ export const scrapInfo = () => {
     }
     return result;
   };
+  const getRegister = () => {
+    const spans = Array.from(document.querySelectorAll('span'));
+    const searchedIndex = spans.findIndex((span) => span.textContent?.includes('Vedený v registri')) + 1;
+    return spans[searchedIndex].textContent;
+  };
   return {
     companyName: findInfo('companyName'),
     cin: findInfo('cin'),
@@ -116,6 +121,7 @@ export const scrapInfo = () => {
     status: getStatus(),
     activities,
     isSlovak: !findInfo('businessAddressForeign'),
-    type: 'individual'
+    type: 'individual',
+    register: getRegister()
   };
 };
