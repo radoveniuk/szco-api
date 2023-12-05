@@ -1,31 +1,39 @@
-import puppeteer from 'puppeteer';
 import { scrapInfo } from './scrapInfo';
+import PuppeteerBrowser from '../../browser';
+
+const spinner = ['|', '/', '-', '\\'];
 
 const extended = async (id: string) => {
-  const startDate = new Date();
+  const browser = await PuppeteerBrowser.browser();
+  const page = await browser.newPage();
 
-  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
   try {
-    const page = await browser.newPage();
+    let timing = 0;
+    const intervalID = setInterval(async () => {
+      timing++;
+      process.stdout.write(`\r${timing !== 1000 ? spinner[timing % spinner.length] : ''} Loading... ${timing / 100} seconds`);
+      if (timing === 1000) {
+        await PuppeteerBrowser.close();
+        clearInterval(intervalID);
+      }
+    }, 10);
     const url = `https://www.zrsr.sk/Detail/${id}`;
 
     await page.goto(url, { waitUntil: 'networkidle2' });
     const combobox = await page.$('#vypis_uplny');
     if (!combobox) {
-      await browser.close();
-      const endDate = new Date();
-      console.log((endDate.getTime() - startDate.getTime()) * 0.001, 'seconds');
+      clearInterval(intervalID);
+      await PuppeteerBrowser.close();
       return null;
     }
     await page.click('#vypis_uplny');
     const result = await page.evaluate(scrapInfo);
-    await browser.close();
-    const endDate = new Date();
-    console.log((endDate.getTime() - startDate.getTime()) * 0.001, 'seconds');
+    clearInterval(intervalID);
+    await PuppeteerBrowser.close();
     return result;
   } catch (error) {
     console.log(error);
-    await browser.close();
+    await PuppeteerBrowser.close();
     return null;
   }
 };
