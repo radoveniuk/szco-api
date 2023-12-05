@@ -1,18 +1,18 @@
 import Hapi from '@hapi/hapi';
-import fs from 'fs';
-import path from 'path';
+// import fs from 'fs';
+// import path from 'path';
 
 import list from './routes/list';
 import extended from './routes/extended';
 
 const init = async () => {
-  const tls = {
-    key: fs.readFileSync(path.join(__dirname, '/../certs/private.key')),
-    cert: fs.readFileSync(path.join(__dirname, '/../certs/certificate.crt'))
-  };
+  // const tls = {
+  //   key: fs.readFileSync(path.join(__dirname, '/../certs/private.key')),
+  //   cert: fs.readFileSync(path.join(__dirname, '/../certs/certificate.crt'))
+  // };
   const server = Hapi.server({
-    port: 3001,
-    tls
+    port: 3001
+    // tls
   });
 
   server.route({
