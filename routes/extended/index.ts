@@ -11,8 +11,8 @@ const extended = async (id: string) => {
     let timing = 0;
     const intervalID = setInterval(async () => {
       timing++;
-      process.stdout.write(`\r${timing !== 1000 ? spinner[timing % spinner.length] : ''} Loading... ${timing / 100} seconds`);
-      if (timing === 1000) {
+      process.stdout.write(`\r${spinner[timing % spinner.length]} Loading... ${timing / 100} seconds`);
+      if (timing === 400) {
         await PuppeteerBrowser.close();
         clearInterval(intervalID);
       }
