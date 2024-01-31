@@ -45,8 +45,9 @@ const extended = async (id: string) => {
         key: 'ocXNnDN0FDdwWKuVB46OSHw1MEe6Wga8PLMIzd8ZGri7AobdXwdK3WraVz4xaw57kqOr3CuUyt0LvMggUCHQ7KEOecBxXHTE4DteWyQFi8MsTF2Fdx5gXeTbkm5FEr3CHpao6AQqAdb9BulVABzSDqQqSRs527USspcmxLteeJVn3KCnADsae8StuBP5cTwpQExP0JOeQFcGWvrDVZAyR2N6qtts3mDA7CnTNX9bljF0SO6oXsjG4ZNrfh'
       }
     }).then(res => res.data.data?.[0]);
+    console.log(financialData);
 
-    return { ...result, DIC: financialData.DIC };
+    return { ...result, DIC: financialData?.DIC };
   } catch (error) {
     console.log(error);
     await PuppeteerBrowser.close();
