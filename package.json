@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@hapi/hapi": "^21.3.2",
+    "axios": "^1.6.7",
     "puppeteer": "^13.0.0"
   }
 }
