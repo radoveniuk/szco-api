@@ -107,9 +107,13 @@ export const scrapInfo = () => {
     }
     return result;
   };
+  const spans = Array.from(document.querySelectorAll('span'));
   const getRegister = () => {
-    const spans = Array.from(document.querySelectorAll('span'));
     const searchedIndex = spans.findIndex((span) => span.textContent?.includes('Vedený v registri')) + 1;
+    return spans[searchedIndex].textContent;
+  };
+  const getRegisterNumber = () => {
+    const searchedIndex = spans.findIndex((span) => span.textContent?.includes('Číslo živnostenského registra')) + 1;
     return spans[searchedIndex].textContent;
   };
   return {
@@ -122,6 +126,7 @@ export const scrapInfo = () => {
     activities,
     isSlovak: !findInfo('businessAddressForeign'),
     type: 'individual',
-    register: getRegister()
+    register: getRegister(),
+    registerNumber: getRegisterNumber()
   };
 };
