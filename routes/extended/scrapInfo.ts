@@ -7,11 +7,11 @@ export const scrapInfo = () => {
     address: 'Vedúci podniku zahraničnej osoby'
   };
   const allInfoRows = Array.from(document.querySelectorAll('.govuk-grid-column-full'));
-  const findInfo = (key: keyof typeof RowTitles) => {
+  const findInfo = (key: keyof typeof RowTitles, withSpan?: boolean) => {
     const findedElement = allInfoRows.find((el) => el?.textContent?.includes(RowTitles[key]));
     const findedElementValue = findedElement?.querySelector('.d-dd');
     // @ts-ignore
-    return findedElementValue?.innerText;
+    return !withSpan ? findedElementValue?.innerText : findedElementValue?.querySelector('span')?.innerText;
   };
   const getActivities = () => {
     const listElements = Array.from(document.querySelector('ol.govuk-list')?.children || []);
@@ -120,7 +120,7 @@ export const scrapInfo = () => {
     companyName: findInfo('companyName'),
     cin: findInfo('cin'),
     name: findInfo('address')?.split('\n')?.[0] || findInfo('companyName'),
-    address: findInfo('address')?.split('\n')?.[1],
+    address: findInfo('address', true)?.split('\n')?.[1],
     businessAddress: findInfo('businessAddressForeign') || findInfo('businessAddressSk'),
     status: getStatus(),
     activities,
