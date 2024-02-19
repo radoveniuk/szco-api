@@ -1,18 +1,13 @@
 import Hapi from '@hapi/hapi';
-// import fs from 'fs';
-// import path from 'path';
 
 import list from './routes/list';
 import extended from './routes/extended';
+import listRPO from './routes/list-rpo';
+import extendedRPO from './routes/extended-rpo';
 
 const init = async () => {
-  // const tls = {
-  //   key: fs.readFileSync(path.join(__dirname, '/../certs/private.key')),
-  //   cert: fs.readFileSync(path.join(__dirname, '/../certs/certificate.crt'))
-  // };
   const server = Hapi.server({
     port: 3001
-    // tls
   });
 
   server.route({
@@ -25,7 +20,10 @@ const init = async () => {
       if (!request.query.search) {
         return h.response('Type your request with search param.').code(400);
       }
-      return list(request.query.search).then((res) => res);
+      if (request.query.type === 'parser') {
+        return list(request.query.search).then((res) => res);
+      }
+      return listRPO(request.query.search).then((res) => res);
     }
   });
 
@@ -39,7 +37,15 @@ const init = async () => {
       if (!request.query.id) {
         return h.response('Type your request with id param.').code(400);
       }
-      return extended(request.query.id).then((res) => {
+      if (request.query.type === 'parser') {
+        return extended(request.query.id).then((res) => {
+          if (res) {
+            return h.response(res).code(200);
+          }
+          return h.response('Not found').code(404);
+        });
+      }
+      return extendedRPO(request.query.id).then((res) => {
         if (res) {
           return h.response(res).code(200);
         }
