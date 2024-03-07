@@ -6,7 +6,7 @@ const listRPO = async (search: string) => {
     console.log(searchParam);
 
     const businesses = await axios
-      .get(`https://api.statistics.sk/rpo/v1/search?${searchParam}=%20${search}&onlyActive=false`)
+      .get(`https://api.statistics.sk/rpo/v1/search?${searchParam}=${search}&onlyActive=false`)
       .then(res => res.data?.results);
 
     return businesses.map((row: { addresses: any[]; fullNames: string | any[]; id: any; identifiers: { value: any; }[]; }) => {
