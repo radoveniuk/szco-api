@@ -3,7 +3,6 @@ import axios from 'axios';
 const listRPO = async (search: string) => {
   try {
     const searchParam = !Number.isNaN(Number(search)) ? 'identifier' : 'fullName';
-    console.log(searchParam);
 
     const businesses = await axios
       .get(`https://api.statistics.sk/rpo/v1/search?${searchParam}=${search}&onlyActive=false`)
