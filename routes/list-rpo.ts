@@ -11,8 +11,8 @@ const listRPO = async (search: string) => {
     return businesses.map((row: { addresses: any[]; fullNames: any[]; id: any; identifiers: { value: any; }[]; }) => {
       const addressObj = row.addresses[0];
       return {
-        companyName: row.fullNames?.find(name => !name.validTo)?.value,
-        name: row.fullNames?.find(name => !name.validTo)?.value,
+        companyName: row.fullNames?.find(name => !name.validTo)?.value || row.fullNames?.[0]?.value,
+        name: row.fullNames?.find(name => !name.validTo)?.value || row.fullNames?.[0]?.value,
         portalId: row.id,
         cin: row.identifiers[0].value,
         businessAddress: `${addressObj.street || ''} ${

@@ -40,8 +40,8 @@ const extendedRPO = async (id: string) => {
   };
 
   return {
-    companyName: result.fullNames?.find((name: { validTo: any; }) => !name.validTo)?.value,
-    name: result.fullNames?.find((name: { validTo: any; }) => !name.validTo)?.value,
+    companyName: result.fullNames?.find((name: { validTo: any; }) => !name.validTo)?.value || result.fullNames?.[0]?.value,
+    name: result.fullNames?.find((name: { validTo: any; }) => !name.validTo)?.value || result.fullNames?.[0]?.value,
     portalId: result.id,
     cin,
     businessAddress: createAddress(addressObj),
