@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const extendedRPO = async (id: string) => {
-  const result = await axios.get(`https://api.statistics.sk/rpo/v1/entity/${id}?showHistoricalData=true`).then(res => res.data);
+  const result:any = await axios.get(`https://api.statistics.sk/rpo/v1/entity/${id}?showHistoricalData=true`).then(res => res.data);
   const cin = result.identifiers[0]?.value;
 
   const financialData = await axios({
@@ -40,8 +40,8 @@ const extendedRPO = async (id: string) => {
   };
 
   return {
-    companyName: result.fullNames?.[result.fullNames.length - 1]?.value,
-    name: result.fullNames?.[result.fullNames.length - 1]?.value,
+    companyName: result.fullNames?.find((name: { validTo: any; }) => !name.validTo)?.value,
+    name: result.fullNames?.find((name: { validTo: any; }) => !name.validTo)?.value,
     portalId: result.id,
     cin,
     businessAddress: createAddress(addressObj),
