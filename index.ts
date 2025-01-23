@@ -4,6 +4,7 @@ import list from './routes/list';
 import extended from './routes/extended';
 import listRPO from './routes/list-rpo';
 import extendedRPO from './routes/extended-rpo';
+import finData from './routes/fin-data';
 
 const TOKEN = '755e6dd8af690571fc0ed957dde2adc56ce823e6549c2286914295ffad427bd387b651eb3dc593e1';
 
@@ -65,6 +66,25 @@ const init = async () => {
         });
       }
       return extendedRPO(request.query.id).then((res) => {
+        if (res) {
+          return h.response(res).code(200);
+        }
+        return h.response('Not found').code(404);
+      });
+    }
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/fin-data',
+    handler: (request, h) => {
+      if (request.query.private_access_token !== TOKEN) {
+        return h.response('Access denied').code(401);
+      }
+      if (!request.query.ico) {
+        return h.response('Type your request with id param.').code(400);
+      }
+      return finData(request.query.ico).then((res) => {
         if (res) {
           return h.response(res).code(200);
         }
