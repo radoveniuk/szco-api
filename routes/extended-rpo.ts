@@ -56,7 +56,8 @@ const extendedRPO = async (id: string) => {
     registerNumber: result.sourceRegister.registrationNumbers?.[0]?.value,
     address: createAddress(statutoryBodyAddressObj),
     status: getStatus(),
-    isSlovak: !statutoryBodyAddressObj || statutoryBodyAddressObj?.country?.code === '703'
+    isSlovak: !statutoryBodyAddressObj || statutoryBodyAddressObj?.country?.code === '703',
+    result
   };
 };
 
