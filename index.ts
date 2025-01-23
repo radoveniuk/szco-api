@@ -5,6 +5,8 @@ import extended from './routes/extended';
 import listRPO from './routes/list-rpo';
 import extendedRPO from './routes/extended-rpo';
 
+const TOKEN = '755e6dd8af690571fc0ed957dde2adc56ce823e6549c2286914295ffad427bd387b651eb3dc593e1';
+
 const init = async () => {
   const server = Hapi.server({
     port: 3001
@@ -14,7 +16,24 @@ const init = async () => {
     method: 'GET',
     path: '/',
     handler: (request, h) => {
-      if (request.query.private_access_token !== '755e6dd8af690571fc0ed957dde2adc56ce823e6549c2286914295ffad427bd387b651eb3dc593e1') {
+      if (request.query.private_access_token !== TOKEN) {
+        return h.response('Access denied').code(401);
+      }
+      if (!request.query.search) {
+        return h.response('Type your request with search param.').code(400);
+      }
+      if (request.query.type === 'parser') {
+        return list(request.query.search).then((res) => res);
+      }
+      return listRPO(request.query.search).then((res) => res);
+    }
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/list',
+    handler: (request, h) => {
+      if (request.query.private_access_token !== TOKEN) {
         return h.response('Access denied').code(401);
       }
       if (!request.query.search) {
@@ -31,7 +50,7 @@ const init = async () => {
     method: 'GET',
     path: '/extended',
     handler: (request, h) => {
-      if (request.query.private_access_token !== '755e6dd8af690571fc0ed957dde2adc56ce823e6549c2286914295ffad427bd387b651eb3dc593e1') {
+      if (request.query.private_access_token !== TOKEN) {
         return h.response('Access denied').code(401);
       }
       if (!request.query.id) {
